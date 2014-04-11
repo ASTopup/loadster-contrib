@@ -26,4 +26,5 @@ http://www.circa2015.com/catalog/product/gallery/id/2/image/3/ : 0/17 exceeded 1
 
 Licensing
 ---------
-Loadster is a commercial product, but our SDK is available under the [Apache License v2](LICENSE).
+Loadster is a commercial product, but the contributed scripts in this repository are 
+available under the [Apache License v2](LICENSE).
