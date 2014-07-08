@@ -7,6 +7,7 @@ var fs = require('fs');
 var argv = require('minimist')(process.argv.slice(2));
 var file = argv.file;
 var threshold = argv.threshold;
+var includeResources = argv.includeresources;
 
 //
 // Print usage and exit if necessary
@@ -15,6 +16,8 @@ if (!file || !threshold) {
     console.log("Required arguments:");
     console.log("  --file=xyas-data.json (your Loadster test data file, unzipped)");
     console.log("  --threshold=1500 (max/min cut-off time in milliseconds)");
+    console.log("Optional arguments:");
+    console.log("  --includeresources");
     process.exit(1);
 } else {
     readResultsFromFile(file);
@@ -49,6 +52,17 @@ function parseResults(json) {
         if (result.Type == 'http') {
             var url = result.Url;
             var duration = result.EndTime - result.StartTime;
+
+            if (!includeResources && result.Children) {
+                for (var j = 0; j < result.Children.length; j++) {
+                    var resource = result.Children[j];
+                    var relativeStartTime = resource.StartTime - result.StartTime;
+
+                    if (relativeStartTime < duration) {
+                        duration = relativeStartTime;
+                    }
+                }
+            }
 
             if (url) {
                 if (!pages[url]) {
